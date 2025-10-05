@@ -2,7 +2,9 @@ import "dotenv/config";
 import fs from "fs";
 import xlsx from "xlsx";
 import path from "path";
-import { FaturaData } from "../types/types";
+import { FaturaData } from "../types/FaturaData";
+
+const TIMEZONE_OFFSET = new Date().getTimezoneOffset() / 60;
 
 export function lerFaturas() {
   const folder = process.env.FATURAS_PATH;
@@ -23,6 +25,8 @@ export function lerFaturas() {
     const ws = wb.Sheets[wb.SheetNames[0]];
 
     const data: FaturaData[] = xlsx.utils.sheet_to_json(ws);
+
+    data.forEach((d) => d.date.setHours(d.date.getHours() + TIMEZONE_OFFSET));
 
     return data;
   });

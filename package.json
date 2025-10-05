@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.ts --ignore ./data"
+    "start": "nodemon src/index.ts --ignore ./data"
   },
   "dependencies": {
     "@types/cors": "^2.8.19",

@@ -1,5 +1,5 @@
 export type FaturaData = {
-  date: string;
+  date: Date;
   title: string;
-  amount: string;
+  amount: number;
 };
