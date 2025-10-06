@@ -6,7 +6,7 @@ import { FaturaData } from "../types/FaturaData";
 
 const TIMEZONE_OFFSET = new Date().getTimezoneOffset() / 60;
 
-export function lerFaturas() {
+export function lerFaturas(): FaturaData[] {
   const folder = process.env.FATURAS_PATH;
 
   if (!folder) throw new Error("Caminho das faturas não informado");
@@ -14,28 +14,35 @@ export function lerFaturas() {
 
   const files = fs.readdirSync(folder);
 
-  const faturas = files.flatMap((file) => {
-    const filepath = path.join(folder, file);
+  const faturas = files
+    .flatMap((file) => {
+      const filepath = path.join(folder, file);
 
-    const wb = xlsx.readFile(filepath, {
-      cellDates: true,
-      codepage: 65001, // UTF-8
-    });
+      const wb = xlsx.readFile(filepath, {
+        cellDates: true,
+        codepage: 65001, // UTF-8
+      });
 
-    const ws = wb.Sheets[wb.SheetNames[0]];
+      const ws = wb.Sheets[wb.SheetNames[0]];
 
-    const data: FaturaData[] = xlsx.utils.sheet_to_json(ws);
+      const data: FaturaData[] = xlsx.utils.sheet_to_json(ws);
 
-    data.forEach((d) => d.date.setHours(d.date.getHours() + TIMEZONE_OFFSET));
+      data.forEach((d) => d.date.setHours(d.date.getHours() + TIMEZONE_OFFSET));
 
-    return data;
-  });
+      return data;
+    })
+    .filter((f) => f.amount >= 0);
+
+  faturas.sort((a, b) => b.date.valueOf() - a.date.valueOf());
 
   return faturas;
 }
 
 export function salvarFaturas(faturas: FaturaData[]) {
   const faturaPath = process.env.FATURA_JSON;
+
+  const folder = path.dirname(faturaPath);
+  if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
 
   fs.writeFileSync(faturaPath, JSON.stringify(faturas, null, 2));
 }

@@ -1,5 +1,9 @@
+import { GroupCalendar } from "./GroupCalendar";
+
 export type GetFaturasFilter = {
   startDate?: Date;
   endDate?: Date;
-  groupBy?: "month" | "year";
+  dateGroup?: GroupCalendar;
+  groupByTitle?: boolean;
+  titleSearch?: string;
 };
