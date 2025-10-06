@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import { parseISO } from "date-fns";
 
 // Função recursiva para converter strings de data
 function convertDates(obj: object): void {
@@ -10,7 +11,7 @@ function convertDates(obj: object): void {
 
       // Se for string que parece uma data, converte para Date
       if (typeof value === "string" && isDateString(value)) {
-        obj[key] = new Date(value);
+        obj[key] = parseISO(value);
       }
       // Se for objeto, chama recursivamente
       else if (typeof value === "object" && value !== null) {
