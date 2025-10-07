@@ -6,6 +6,8 @@ import { FaturaData } from "../types/FaturaData";
 
 const TIMEZONE_OFFSET = new Date().getTimezoneOffset() / 60;
 
+const TITLES_FILTER = ["Saldo em atraso", "Crédito de atraso", "Pagamento recebido"];
+
 export function lerFaturas(): FaturaData[] {
   const folder = process.env.FATURAS_PATH;
 
@@ -31,7 +33,7 @@ export function lerFaturas(): FaturaData[] {
 
       return data;
     })
-    .filter((f) => f.amount >= 0);
+    .filter((f) => !TITLES_FILTER.includes(f.title));
 
   faturas.sort((a, b) => b.date.valueOf() - a.date.valueOf());
 

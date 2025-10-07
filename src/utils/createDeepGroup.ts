@@ -27,7 +27,7 @@ function createDeepGroup(faturas: FaturasArray, groupKeyGetter: (f: FaturaData) 
     groups[groupKey].faturas.push(f);
   }
 
-  return Object.values(groups);
+  return Object.values(groups).sort((a, b) => b.date.valueOf() - a.date.valueOf());
 }
 
 export default createDeepGroup;

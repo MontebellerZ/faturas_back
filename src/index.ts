@@ -14,12 +14,12 @@ app.post("/faturas", (req, res) => {
   let faturas: FaturaData[] = lerFaturas();
 
   if (filtros.startDate) {
-    filtros.startDate.setHours(0, 0, 0);
+    filtros.startDate.setHours(0, 0, 0); // início do dia para que a comparação aceite todo o dia do filtro
     faturas = faturas.filter((f) => f.date >= filtros.startDate);
   }
 
   if (filtros.endDate) {
-    filtros.endDate.setHours(24, 0, 0);
+    filtros.endDate.setHours(24, 0, 0); // início do próximo dia para que a comparação aceite todo o dia do filtro
     faturas = faturas.filter((f) => f.date < filtros.endDate);
   }
 
